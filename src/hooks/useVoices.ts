@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useVoice, { State, Operations as _Operations } from "./useVoice";
 import { Audio } from "../utils/Audio";
+import { blobToBase64 } from "../utils/tools";
 
 type ReturnUseVoice = {
 	[T in keyof ReturnType<typeof useVoice> as T extends
@@ -57,8 +58,12 @@ export default (): ReturnUseVoice => {
 		}
 
 		const audio = new Audio([uVoice, dVoice]);
+		await audio.init();
 		audio.play();
 		audio.download();
+		console.info(audio.context);
+		const d = await blobToBase64(audio.context.blob!);
+		console.info(d);
 	};
 	useEffect(() => {
 		effect();
